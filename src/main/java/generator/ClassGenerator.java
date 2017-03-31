@@ -41,8 +41,8 @@ public class ClassGenerator {
     // TODO: return a stream to template.txt
     // do not use java.io.FileInputStream or java.nio.file.Files
     // create and test two solutions:
-    // 1) using Class#getResourceAsStream
-    // 2) using ClassLoader#getResourceAsStream
+    // 1) using ClassLoader#getResourceAsStream
+    // 2) using Class#getResourceAsStream
     return null;
   }
 }
