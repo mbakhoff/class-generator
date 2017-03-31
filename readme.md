@@ -133,6 +133,6 @@ When the application is packaged by maven, the resources are automatically inclu
 1. clone this github repository and open it in the ide.  
 2. implement ClassGenerator#getStream so that the template.txt is loaded from the classpath.  
 3. open the command line and navigate to the project.
-4. run *mvn clean package* (this will compile the code and generate a jar in *target* directory).
+4. run *mvn clean package* (this will compile the code and generate a jar).
 5. run the *generator.ClassGenerator* from command line. 
-   the class-generator jar must be the only element in classpath.
+   the classpath should contain the class-generator jar from *target* and commons-io from *target/dependency*.
