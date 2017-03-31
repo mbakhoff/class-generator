@@ -1,0 +1,28 @@
+public class ${className} {
+
+  private ${field1Type} ${field1Name};
+  private ${field2Type} ${field2Name};
+
+  public void set${field1Name}(${field1Type} ${field1Name}) {
+    this.${field1Name} = ${field1Name};
+  }
+
+  public ${field1Type} get${field1Name}() {
+    return ${field1Name};
+  }
+
+  public void set${field2Name}(${field2Type} ${field2Name}) {
+    this.${field2Name} = ${field2Name};
+  }
+
+  public ${field2Type} get${field2Name}() {
+    return ${field2Name};
+  }
+
+  @Override
+  public String toString() {
+    return "${className} {" +
+        "${field1Name}=" + ${field1Name} +
+        ", ${field2Name}=" + ${field2Name} + "}";
+  }
+}
