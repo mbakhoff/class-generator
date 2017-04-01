@@ -20,7 +20,7 @@ Note that system classes (*java.lang* etc.) are loaded from a separate bootclass
 When the classes are organized in packages, then the classpath must contain the directories that contain the packages.
 For example, then you have classes *app.FileResult* and *app.StorageApp*, then the class files must be in the directory *app* and *app* must be in the directory contained in the classpath. 
 
-    build
+    some_classpath_dir
        └── app
             ├── FileResult.class
             └── StorageApp.class
@@ -33,17 +33,24 @@ The syntax for specifying the classpath is the same as for the java runtime.
 
 ### Compiling the application
 
+For the first part we'll be using a small sample application called StorageApp. 
+StorageApp uses an external library called *google gson* which can convert objects into strings and back. 
+The StorageApp creates an object, converts it into a string and back and prints out the results. 
+We will try to compile and run it on the command line. 
+
 1. download *storage.zip* from the root of this repository.
 2. unzip *storage.zip*.
 3. open the command line and navigate to the unpacked *storage* directory. 
    you don't need to leave that directory for the rest of this chapter.  
 4. check that the source files are in *src* and the gson jar is in *lib*. 
    read the source code.  
-5. create a directory named *build*.
+5. create a directory named *build*. 
+   this is where we want the compiler to put the compiled class files.
+   by default the compiler will put the class files next to the source, but packaging the application is easier when the class files are in a separate directory.
 6. run *javac -help* on the command line.
 7. use *javac* to compile the code in *src*. 
    
-   set the necessary flags to generate all debugging info, specify *utf-8* for source file encoding and set the output directory to *build*. 
+   set the necessary options to generate all debugging info, specify *utf-8* for source file encoding and place generated class files in *build*. 
    note that you should pass all source files to *javac* in one go, not compile them one-by-one.   
    
    the source code references classes from package *com.google.gson*. 
@@ -58,13 +65,14 @@ The syntax for specifying the classpath is the same as for the java runtime.
 1. run *java -help* on the command line.
 2. the main method is in *app.StorageApp*. 
    try to start the application with *java app.StorageApp*.
-   note that you need to pass the *fully qualified class name* (not the class file itself).
-   the command will fail. why can the JVM not find the main class?
+   note that you need to pass the full class name including the package name (*fully qualified class name*) and **not the file path**.  
+   the command should fail. why can the JVM not find the main class?
    remember what the error looks like. you will need to understand it some day. 
 3. try to start the application again, but this time add the *build* directory to classpath (and nothing else).
-   the command will fail. why can the JVM not find the Gson class?
+   the command should fail. why can the JVM not find the Gson class?
    remember what the error looks like. you will need to understand it some day. 
 4. try to start the application again, but this time add both the *build* directory and the gson jar to classpath.
+   you should specify the *-cp* option only once and separate the elements using either ':' or ';'.
    the application should start up and generate some output.
 
 ### Packaging the application
@@ -78,7 +86,7 @@ The JDK includes a command line tool to generate jar files.
 3. open the jar in your favourite archive tool and see what's inside.
 4. start the application. 
    this time ignore the *build* directory and add *build.jar* and the gson jar to classpath. 
-5. delete the *build* directory, but keep the jar file.
+5. delete the *build* and *src* directories, but keep the jar file.
 
 ### Using jar files in your project
 
@@ -114,8 +122,15 @@ To load classes or find resources from the classpath you will need to use a Clas
 In this practice session we will use the *getResourceAsStream* method from the ClassLoader class. 
 
 Each class in a running application is loaded by some classloader. 
-To get a reference to the classloader of an object, use *someObject.getClass().getClassLoader()*. 
-Alternatively you can directly reference a class by using *SomeClass.class.getClassLoader()*.
+To get a reference to the classloader of an object: 
+    
+    Class<?> c = someObject.getClass();
+    ClassLoader cl = c.getClassLoader();
+
+Alternatively you can directly reference a class: 
+
+    Class<?> c = SomeClass.class;
+    ClassLoader cl = c.getClassLoader();    
 
 Note that a Class object also has the *getResourceAsStream* method, but that works a little different from the one in ClassLoader. 
 See https://stackoverflow.com/q/6608795 for details. 
@@ -129,10 +144,14 @@ You will have to fix the application so it will correctly load the class templat
 The application uses the standard maven directory layout. 
 The code is in *src/main/java* and resources are in *src/main/resources*.
 When the application is packaged by maven, the resources are automatically included in the resulting jar file.
+When running a maven application from the ide, both the compiled classes and the resources folder are included in the classpath.  
 
 1. clone this github repository and open it in the ide.  
-2. implement ClassGenerator#getStream so that the template.txt is loaded from the classpath.  
+2. implement ClassGenerator#getStream so that the template.txt is loaded from the classpath using ClassLoader#getResourceAsStream.  
 3. open the command line and navigate to the project.
-4. run *mvn clean package* (this will compile the code and package the jar).
+4. run *mvn clean package*. 
+   this will compile the code and package the jar into the *target* directory.
 5. run the *generator.ClassGenerator* from command line. 
    the classpath should contain the class-generator jar from *target* and commons-io from *target/dependency*.
+6. change ClassGenerator#getStream so that Class#getResourceAsStream is used. 
+   don't forget to rebuild the application after changing the code. 
