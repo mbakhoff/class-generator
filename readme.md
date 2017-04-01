@@ -18,7 +18,7 @@ When the classpath is not specified, then the current working directory will be 
 Note that system classes (*java.lang* etc.) are loaded from a separate bootclasspath. 
 
 When the classes are organized in packages, then the classpath must contain the directories that contain the packages.
-For example, then you have classes *app.FileResult* and *app.StorageApp*, then the classes must be in the directory *app* and *app* must be in the directory contained in the classpath. 
+For example, then you have classes *app.FileResult* and *app.StorageApp*, then the class files must be in the directory *app* and *app* must be in the directory contained in the classpath. 
 
     build
        └── app
@@ -96,7 +96,6 @@ The JDK includes a command line tool to generate jar files.
 5. move to the new project's directory on the command line.
 6. create a *build* directory and compile the FileCalculator using *javac*.
 7. start the FileCalculator using *java*. 
-   don't forget to set the classpath.
 
 ## Classpath resources
 
@@ -109,7 +108,7 @@ When the resources are in the jar, then there is no need to know any absolute or
 This may seem useless when you run the app in on your own machine, but becomes more useful when the jar is shipped to other developers. 
 But how can the application access the resources when they are packaged into the jar? 
 
-The JVM classloading mechanism can already find class files from any jar file in the classpath. 
+The JVM classloading mechanism can already find class files from any jar and directory in the classpath. 
 It turns out that there's an easy way to use that same mechanism to find and read any file from the classpath in your own code. 
 To load classes or find resources from the classpath you will need to use a ClassLoader object.
 In this practice session we will use the *getResourceAsStream* method from the ClassLoader class. 
@@ -127,12 +126,13 @@ As an exercise we will look at a small application that simulates a regular stud
 The student uses a fixed class template to generate different random classes until something passes the automatic tests.
 You will have to fix the application so it will correctly load the class template from the classpath.
 
-The application uses the standard maven directory layout. The code is in *src/main/java* and resources are in *src/main/resources*.
-When the application is packaged by maven, the resources are automatically included in the resulting jar file. 
+The application uses the standard maven directory layout. 
+The code is in *src/main/java* and resources are in *src/main/resources*.
+When the application is packaged by maven, the resources are automatically included in the resulting jar file.
 
 1. clone this github repository and open it in the ide.  
 2. implement ClassGenerator#getStream so that the template.txt is loaded from the classpath.  
 3. open the command line and navigate to the project.
-4. run *mvn clean package* (this will compile the code and generate a jar).
+4. run *mvn clean package* (this will compile the code and package the jar).
 5. run the *generator.ClassGenerator* from command line. 
    the classpath should contain the class-generator jar from *target* and commons-io from *target/dependency*.
