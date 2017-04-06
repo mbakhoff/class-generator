@@ -1,5 +1,15 @@
 # Classpath and command line
 
+## Preparations
+
+Make sure the following is set:
+* you have jdk8 installed
+* environment variable JAVA_HOME points to the JDK install dir
+* environment variable PATH contains the bin directory in JAVA_HOME
+* you have apache maven downloaded and unpacked somewhere
+* environment variable M2_HOME points to the maven directory
+* environment variable PATH contains the bin directory in M2_HOME
+
 ## Compiling from command line
 
 This practice session will start with closing your IDE. 
