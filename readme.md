@@ -5,7 +5,7 @@
 This practice session will start with closing your IDE. 
 Today we will learn how to compile and run Java from command line. 
 
-A Java application consists of many classes and external dependecies. 
+A Java application consists of many classes and external dependencies. 
 External dependencies are jar files containing useful compiled code that your classes can reference. 
 How does Java find all these jars when you start your application so it can load the code? 
 How does it find the classes that you created yourself? 
@@ -20,10 +20,12 @@ Note that system classes (*java.lang* etc.) are loaded from a separate bootclass
 When the classes are organized in packages, then the classpath must contain the directories that contain the packages.
 For example, then you have classes *app.FileResult* and *app.StorageApp*, then the class files must be in the directory *app* and *app* must be in the directory contained in the classpath. 
 
-    some_classpath_dir
-       └── app
-            ├── FileResult.class
-            └── StorageApp.class
+```
+some_classpath_dir
+   └── app
+        ├── FileResult.class
+        └── StorageApp.class
+```
 
 When the JVM needs to load a class, it will search the locations in the classpath in the order they are specified and use the first match.
 The files in both jars and directories must follow the usual java package structure, i.e. the class file must be located within a directory matching its package name. 
@@ -47,7 +49,7 @@ We will try to compile and run it on the command line.
 5. create a directory named *build*. 
    this is where we want the compiler to put the compiled class files.
    by default the compiler will put the class files next to the source, but packaging the application is easier when the class files are in a separate directory.
-6. run *javac -help* on the command line.
+6. run `javac -help` on the command line.
 7. use *javac* to compile the code in *src*. 
    
    set the necessary options to generate all debugging info, specify *utf-8* for source file encoding and place generated class files in *build*. 
@@ -62,16 +64,17 @@ We will try to compile and run it on the command line.
 
 ### Running the application 
 
-1. run *java -help* on the command line.
-2. the main method is in *app.StorageApp*. 
+1. make sure you're still in the *storage* directory. 
+2. run `java -help` on the command line.
+3. the main method is in *app.StorageApp*. 
    try to start the application with *java app.StorageApp*.
    note that you need to pass the full class name including the package name (*fully qualified class name*) and **not the file path**.  
    the command should fail. why can the JVM not find the main class?
    remember what the error looks like. you will need to understand it some day. 
-3. try to start the application again, but this time add the *build* directory to classpath (and nothing else).
+4. try to start the application again, but this time add the *build* directory to classpath (and nothing else).
    the command should fail. why can the JVM not find the Gson class?
    remember what the error looks like. you will need to understand it some day. 
-4. try to start the application again, but this time add both the *build* directory and the gson jar to classpath.
+5. try to start the application again, but this time add both the *build* directory and the gson jar to classpath.
    you should specify the *-cp* option only once and separate the elements using either ':' or ';'.
    the application should start up and generate some output.
 
@@ -80,9 +83,9 @@ We will try to compile and run it on the command line.
 As mentioned earlier in the maven practice session, jar files are regular zip archives that contain class files and resources. 
 The JDK includes a command line tool to generate jar files. 
 
-1. run *jar -help* on the command line.
+1. run `jar -help` on the command line.
 2. package the contents of the *build* directory into a jar *build.jar*. 
-   run *jar cvf build.jar -C build .* (dot is part if the command).
+   run `jar cvf build.jar -C build .` (dot is part of the command).
 3. open the jar in your favourite archive tool and see what's inside.
 4. start the application. 
    this time ignore the *build* directory and add *build.jar* and the gson jar to classpath. 
@@ -98,7 +101,7 @@ The JDK includes a command line tool to generate jar files.
    open the *File* menu in the ide, open the project structure. 
    open the libraries section. 
    on the left side there's a list of libraries. 
-   click the green plus sign, select *Java* and find your *storage.jar*.
+   click the green plus sign, select *Java* and find your *build.jar*.
    the project should compile now. 
 4. close the ide again.
 5. move to the new project's directory on the command line.
@@ -119,20 +122,24 @@ But how can the application access the resources when they are packaged into the
 The JVM classloading mechanism can already find class files from any jar and directory in the classpath. 
 It turns out that there's an easy way to use that same mechanism to find and read any file from the classpath in your own code. 
 To load classes or find resources from the classpath you will need to use a ClassLoader object.
-In this practice session we will use the *getResourceAsStream* method from the ClassLoader class. 
+In this practice session we will use the `getResourceAsStream` method from the ClassLoader class. 
 
 Each class in a running application is loaded by some classloader. 
 To get a reference to the classloader of an object: 
-    
-    Class<?> c = someObject.getClass();
-    ClassLoader cl = c.getClassLoader();
+
+```
+Class<?> c = someObject.getClass();
+ClassLoader cl = c.getClassLoader();
+```
 
 Alternatively you can directly reference a class: 
 
-    Class<?> c = SomeClass.class;
-    ClassLoader cl = c.getClassLoader();    
+```
+Class<?> c = SomeClass.class;
+ClassLoader cl = c.getClassLoader();
+```
 
-Note that a Class object also has the *getResourceAsStream* method, but that works a little different from the one in ClassLoader. 
+Note that a Class object also has the `getResourceAsStream` method, but that works a little different from the one in ClassLoader. 
 See https://stackoverflow.com/q/6608795 for details. 
 
 ### Loading classpath resources
