@@ -28,7 +28,7 @@ When the classpath is not specified, then the current working directory will be 
 Note that system classes (*java.lang* etc.) are loaded from a separate bootclasspath. 
 
 When the classes are organized in packages, then the classpath must contain the directories that contain the packages.
-For example, then you have classes *app.FileResult* and *app.StorageApp*, then the class files must be in the directory *app* and *app* must be in the directory contained in the classpath. 
+For example, when you have classes *app.FileResult* and *app.StorageApp*, then the class files must be in the directory *app* and *app* must be in the directory contained in the classpath.
 
 ```
 some_classpath_dir
