@@ -193,4 +193,4 @@ When running a maven application from the ide, both the compiled classes and the
 4. run *mvn clean package*.
    this will compile the code and package the jar into the *target* directory.
 5. run the *generator.ClassGenerator* from command line.
-   the classpath should contain the class-generator jar from *target* and commons-io from *target/dependency*.
+   the classpath should contain the class-generator.jar from *target* and commons-io from *target/dependency*.
