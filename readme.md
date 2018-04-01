@@ -128,10 +128,6 @@ The JDK includes a command line tool to generate jar files.
    on the left side there's a list of libraries.
    click the green plus sign, select *Java* and find your *build.jar*.
 4. make sure that the project can now be compiled.
-5. close the ide again.
-6. move to the new project's directory on the command line.
-7. create a *build* directory and compile the FileCalculator using *javac*.
-8. start the FileCalculator using *java*.
 
 ## Classpath resources
 
