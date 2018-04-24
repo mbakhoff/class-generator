@@ -23,7 +23,7 @@ How does it find the classes that you created yourself?
 The JVM (Java Virtual Machine) finds classes and other resources from the **classpath**.
 The classpath is a **list of jar files and directories** (relative or absolute paths).
 When starting the JVM, the user can specify the classpath elements using a command line argument.
-The elements in the command line argument are separated by colon ':' in linux/mac and semicolon ';' in windows.
+The elements in the command line argument are separated by colon `:` in linux/mac and semicolon `;` in windows.
 When the classpath is not specified, then the current working directory will be used as the only classpath element.
 Note that system classes (*java.lang* etc.) are loaded from a separate bootclasspath.
 
@@ -70,19 +70,20 @@ We will try to compile and run it on the command line.
    this is where we want the compiler to put the compiled class files.
    by default the compiler will put the class files next to the source, but packaging the application is easier when the class files are in a separate directory.
 6. run `javac -help` on the command line.
-7. use *javac* with the following options to compile the code in *src*:
+7. use *javac* to compile the code in *src*.
+   specify *utf-8* for character encoding of the source files (`-encoding`).
+   place the generated class files in the *build* directory (`-d`).
+   pass all the source files to *javac* at once (use relative paths).
 
-   set the necessary options to generate all debugging info.
-   specify *utf-8* for character encoding used by source files.
-   place the generated class files in the created *build* directory.
-
-   note that you should pass all source files to *javac* in one go, not compile them one-by-one.
-   you can specify the source files using relative paths, e.g. `javac src/x.java src/y/z.java`.
+   the command will look something like this:
+   ```
+   javac -encoding utf-8 -d build path/to/file1.java path/to/file2.java
+   ```
 
    the source code references classes from package *com.google.gson*.
    try to compile the classes without setting the classpath.
    what error do you get?
-   try again, but this time add gson-2.7.jar to the classpath.
+   try again, but this time add gson-2.7.jar to the classpath (`-cp`).
 
 8. make sure the class files were created in *build* and not in *src*.
 
@@ -92,14 +93,14 @@ We will try to compile and run it on the command line.
 2. run `java -help` on the command line.
 3. the main method is in *app.StorageApp*.
    try to execute the class using `java app.StorageApp`.
-   note that you need to use the *fully qualified class name* (package name + class name) and not the class file path.
-   the command should fail. why can the JVM not find the main class?
-   remember what the error looks like. you will need to understand it some day.
-4. try to start the application again, but this time add the *build* directory to classpath (and nothing else).
-   the command should fail. why can the JVM not find the Gson class?
-   remember what the error looks like. you will need to understand it some day.
-5. try to start the application again, but this time add both the *build* directory and the gson jar to classpath.
-   you should specify the *-cp* option only once (use ':' or ';' as the separator, depending on your OS).
+   note that the argument is a *fully qualified class name* (package name + class name), not a path to a *.class* file.
+   the command should fail.
+   why can the JVM not find the main class?
+4. try to start the application again, but this time add the *build* directory to the classpath (`-cp`).
+   the command should still fail, but with a different error.
+   why can the JVM not find the `Gson` class?
+5. try to start the application again, but this time add both the *build* directory and the gson jar to the classpath.
+   you should specify the `-cp` option only once (use `:` or `;` as the separator, depending on your OS).
    the application should start up and generate some output.
 
 ### Packaging the application
