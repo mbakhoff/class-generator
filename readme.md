@@ -115,20 +115,6 @@ The JDK includes a command line tool to generate jar files.
 4. open the jar in your favourite archive tool and see what's inside.
 5. start the application again.
    this time only add the *build.jar* and gson jar to the classpath (exclude the build directory).
-6. delete the *build* and *src* directories, but keep the *build.jar* file.
-
-### Using jar files in your project
-
-1. open the ide and and start a new (non-maven) project.
-2. add the following class to your project:
-   https://gist.github.com/mbakhoff/0ddfeeb56acacc3000c4ffb72f8c088b
-3. the class depends on the FileResult class from the *storage* code and won't compile without it.
-   let's include the storage code in our project.
-   open the *File* menu in the ide, open the project structure.
-   open the libraries section.
-   on the left side there's a list of libraries.
-   click the green plus sign, select *Java* and find your *build.jar*.
-4. make sure that the project can now be compiled.
 
 ## Classpath resources
 
