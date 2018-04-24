@@ -40,7 +40,7 @@ public class ClassGenerator {
   private static InputStream getStream() {
     // TODO: return a stream to template.txt
     // do not use java.io.FileInputStream or java.nio.file.Files
-    // use ClassLoader#getResourceAsStream
+    // use getResourceAsStream from the ClassLoader that loaded ClassGenerator
     return null;
   }
 }

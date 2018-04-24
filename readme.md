@@ -120,17 +120,17 @@ The JDK includes a command line tool to generate jar files.
 
 An application consists of its classes and dependencies.
 In addition, it can contain different non-code resources: images, configuration files, translations etc.
-All these resources are included in the jar when packaging and distributing your application.
+All these resources should be included in the jar when packaging and distributing your application.
 
 Packaging all the resources in the jar is convenient because the files don't get lost, but more importantly, they are always in the same place as the code.
 When the resources are in the jar, then there is no need to know any absolute or relative paths within the machine where your application is running at.
-This may seem useless when you run the app in on your own machine, but becomes more useful when the jar is shipped to other developers.
+This may seem useless when you run the app in on your own machine, but becomes more useful when the jar is shipped to other developers or the customer.
 But how can the application access the resources when they are packaged into the jar?
 
 The JVM classloading mechanism can already find class files from any jar and directory in the classpath.
-It turns out that there's an easy way to use that same mechanism to find and read any file from the classpath in your own code.
-To load classes or find resources from the classpath you will need to use a ClassLoader object.
-In this practice session we will use the `getResourceAsStream` method from the ClassLoader class.
+Your application can use that same mechanism to find and read any file from the classpath.
+To find resources from the classpath you will need to use a *ClassLoader*.
+The `getResourceAsStream` method from the `ClassLoader` class is usually the best option.
 
 Each class in a running application is loaded by some classloader.
 To get a reference to the classloader of an object:
@@ -174,10 +174,10 @@ The code is in *src/main/java* and resources are in *src/main/resources*.
 When the application is packaged by maven, the resources are automatically included in the resulting jar file.
 When running a maven application from the ide, both the compiled classes and the resources folder are included in the classpath.
 
-1. clone [this github repository](https://github.com/mbakhoff/classpath-tutorial) and open it in the ide.
+1. clone the repository and open it in the ide.
 2. implement ClassGenerator#getStream so that the template.txt is loaded from the classpath using ClassLoader#getResourceAsStream.
 3. open the command line and navigate to the project.
 4. run *mvn clean package*.
    this will compile the code and package the jar into the *target* directory.
-5. run the *generator.ClassGenerator* from command line.
-   the classpath should contain the class-generator.jar from *target* and commons-io from *target/dependency*.
+5. run the `generator.ClassGenerator` class from command line.
+   the classpath should contain the *class-generator.jar* from *target* and the *commons-io* jar from *target/dependency*.
