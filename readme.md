@@ -3,7 +3,7 @@
 ## Preparations
 
 Make sure the following is set:
-* you have jdk8+ installed
+* you have jdk11+ installed
 * environment variable JAVA_HOME points to the JDK install dir
 * environment variable PATH contains the bin directory in JAVA_HOME
 * you have apache maven downloaded and unpacked somewhere
@@ -23,7 +23,7 @@ How does it find the classes that you created yourself?
 The JVM (Java Virtual Machine) finds classes and other resources from the **classpath**.
 The classpath is a **list of jar files and directories** (relative or absolute paths).
 When starting the JVM, the user can specify the classpath elements using a command line argument.
-The elements in the command line argument are separated by colon `:` in linux/mac and semicolon `;` in windows.
+The elements are separated by colon `:` in linux/mac and semicolon `;` in windows.
 When the classpath is not specified, then the current working directory will be used as the only classpath element.
 Note that system classes (*java.lang* etc.) are loaded from a separate bootclasspath.
 
@@ -37,23 +37,28 @@ some_classpath_dir
         └── StorageApp.class
 ```
 
-Java contains the class `java.lang.ClassLoader`.
-Classloader objects are used to load all the classes the JVM needs to run the application.
-When a classloader is used to load a class, it will search the locations in the classpath in the order they are specified.
-The first `.class` file that matches the requested class name is loaded.
+Example of specifying a classpath with two elements on linux/mac:
+
+```
+java -cp target/classes:some_classpath_dir mypackage.MyMain
+```
+
+Java has a built-in class `java.lang.ClassLoader`.
+When some class is needed by the program, the classloader will search the locations in the classpath in the order they are specified.
+The first `.class` file that matches the requested class is loaded.
 
 Example:
-The classloader needs to load the class `app.StorageApp` using classpath `random_dir:some_classpath_dir`.
+The classloader needs to load the class `app.StorageApp` using classpath `target/classes:some_classpath_dir`.
 The classloader will first generate a file name based on the class name: `fullClassName.replace('.', '/') + ".class"`.
 In this case it will be looking for `app/StorageApp.class`.
-It will first take the first classpath element, `random_dir` and check if `random_dir/app/StorageApp.class` exists.
+It will first take the first classpath element, `target/classes` and check if `target/classes/app/StorageApp.class` exists.
 If the file is not found, then the next classpath element is searched.
 It will check if `some_classpath_dir/app/StorageApp.class` exists, find the class file and load it.
 
 The java compiler (*javac*) uses the same classpath mechanism for finding dependencies during compile time.
 The syntax for specifying the classpath is the same as for the java runtime.
 
-### Compiling the application
+### Compiling an application
 
 For the first part we'll be using a small sample application called StorageApp.
 StorageApp uses an external library called *google gson* which can convert objects into strings and back.
@@ -71,7 +76,7 @@ We will try to compile and run it on the command line.
    by default the compiler will put the class files next to the source, but packaging the application is easier when the class files are in a separate directory.
 6. run `javac -help` on the command line.
 7. use *javac* to compile the code in *src*.
-   specify *utf-8* for character encoding of the source files (`-encoding`).
+   specify *utf-8* for the character encoding of the source files (`-encoding`).
    place the generated class files in the *build* directory (`-d`).
    pass all the source files to *javac* at once (use relative paths).
 
@@ -148,7 +153,7 @@ class StorageApp {
 }
 ```
 
-Alternatively you can directly reference a class:
+Getting a Class object without using getClass:
 
 ```
 class StorageApp {
@@ -163,6 +168,15 @@ class StorageApp {
 }
 ```
 
+Loading a resource from a classloader:
+
+```
+InputStream findResource(ClassLoader cl) {
+  InputStream in = cl.getResourceAsStream("path/in/jar-or-dir");
+  return in; // null if not found
+}
+```
+
 ### Loading classpath resources
 
 As an exercise we will look at a small application that simulates a regular student trying to solve a programming test.
@@ -172,12 +186,12 @@ You will have to fix the application so it will correctly load the class templat
 The application uses the standard maven directory layout.
 The code is in *src/main/java* and resources are in *src/main/resources*.
 When the application is packaged by maven, the resources are automatically included in the resulting jar file.
-When running a maven application from the ide, both the compiled classes and the resources folder are included in the classpath.
+When running a maven application from the IDE, both the compiled classes and the resources folder are automatically included in the classpath.
 
-1. clone the repository and open it in the ide.
+1. clone this repository and open it in the IDE.
 2. implement ClassGenerator#getStream so that the template.txt is loaded from the classpath using ClassLoader#getResourceAsStream.
 3. open the command line and navigate to the project.
 4. run *mvn clean package*.
    this will compile the code and package the jar into the *target* directory.
-5. run the `generator.ClassGenerator` class from command line.
-   the classpath should contain the *class-generator.jar* from *target* and the *commons-io* jar from *target/dependency*.
+5. run the `generator.ClassGenerator` class from the command line.
+   the classpath should contain only the *class-generator.jar* from *target*.

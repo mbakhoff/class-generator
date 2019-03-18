@@ -1,7 +1,5 @@
 package generator;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -31,9 +29,12 @@ public class ClassGenerator {
 
   private static String readTemplate() throws IOException {
     try (InputStream is = getStream()) {
-      if (is == null)
-        throw new RuntimeException("template stream is null");
-      return IOUtils.toString(is, StandardCharsets.UTF_8);
+      if (is == null) {
+        // classloader didn't find the file. look inside the jar
+        // and make sure the path in getStream() is correct.
+        throw new RuntimeException("stream is null");
+      }
+      return new String(is.readAllBytes(), StandardCharsets.UTF_8);
     }
   }
 
