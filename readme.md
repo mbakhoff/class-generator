@@ -114,7 +114,7 @@ As mentioned earlier in the maven practice session, jar files are regular zip ar
 The JDK includes a command line tool to generate jar files.
 
 1. make sure you're still in the *storage* directory (don't leave it).
-2. run `jar -help` on the command line.
+2. run `jar --help` on the command line.
 3. package the contents of the *build* directory into a jar *build.jar*.
    run `jar cvf build.jar -C build .` (dot is part of the command).
 4. open the jar in your favourite archive tool and see what's inside.
